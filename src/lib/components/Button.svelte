@@ -10,12 +10,13 @@
 <button
   {type}
   {disabled}
+  on:click
   class={`cursor-pointer rounded-lg px-4 py-2 font-medium transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none
       ${
         variant === 'primary'
           ? 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500'
           : variant === 'secondary'
-            ? 'bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-400'
+            ? 'bg-orange-500 text-white hover:bg-orange-300 focus:ring-orange-400'
             : variant === 'danger'
               ? 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
               : variant === 'success'

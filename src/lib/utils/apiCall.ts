@@ -1,9 +1,9 @@
 import { ERROR_NOT_FOUND_404, ERROR_SERVER_500, ERROR_UNAUTHORIZED_401 } from './constants';
 
 // API call with error handling
-export async function apiCall<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
+export async function apiCall<T>(req: RequestInfo, init?: RequestInit): Promise<T> {
   try {
-    const res = await fetch(input, init);
+    const res = await fetch(req, init);
 
     if (!res.ok) {
       if (res.status === 404) {

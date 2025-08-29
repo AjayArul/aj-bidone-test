@@ -1,8 +1,9 @@
 <script lang="ts">
-  import '../app.css';
   import favicon from '$lib/assets/aj_fav.ico';
-  import { Menu, X } from 'svelte-heros';
   import Nav from '$lib/components/Nav.svelte';
+  import NotificationList from '$lib/components/Notifications.svelte';
+  import { Menu, X } from 'svelte-heros';
+  import '../app.css';
 
   let isMobileMenuOpen = false;
 </script>
@@ -42,6 +43,6 @@
       <Nav onClick={() => (isMobileMenuOpen = false)} />
     </div>
   {/if}
-
+  <NotificationList />
   <slot />
 </div>
