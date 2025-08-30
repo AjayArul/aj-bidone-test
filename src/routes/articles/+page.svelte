@@ -129,15 +129,41 @@
   <ul class="grid gap-4 md:grid-cols-1 xl:grid-cols-2">
     {#each $articles as article}
       <li
-        class="mb-2 flex items-center justify-between rounded-lg border border-gray-100 bg-white/40 p-4 shadow-sm backdrop-blur-md"
+        class="mb-2 flex items-start justify-between gap-4 rounded-xl border border-gray-200 bg-white/60 p-5 shadow-md backdrop-blur-lg transition hover:shadow-lg"
       >
-        <div>
-          <h3 class="font-semibold">{article.title}</h3>
-          <p>{article.status} - {article.author}</p>
+        <div class="flex-1">
+          <h3 class="mb-1 text-lg font-semibold text-gray-900">{article.title}</h3>
+          <p class="text-sm text-gray-700">
+            <span
+              class={`inline-block rounded-full px-3 py-0.5 text-xs font-medium text-white
+          ${article.status === STATUS_PUBLISHED ? 'bg-green-500' : 'bg-sky-500'}`}
+            >
+              {article.status}
+            </span>
+            <span class="mx-2 text-gray-800">|</span>
+            <span class="text-gray-500">{new Date(article.createdAt).toLocaleDateString()}</span>
+            <span class="mx-2 text-gray-800">|</span>
+            <span class="font-medium text-gray-800">{article.author}</span>
+          </p>
         </div>
-        <div class="flex gap-2">
-          <Button variant="primary" on:click={() => openEdit(article)}><PencilAlt /></Button>
-          <Button variant="danger" on:click={() => deleteArticle(article.id)}><Trash /></Button>
+
+        <div class="flex items-center gap-2">
+          <Button
+            variant="primary"
+            title="Edit article"
+            aria-label="Edit article"
+            on:click={() => openEdit(article)}
+          >
+            <PencilAlt class="h-5 w-5" />
+          </Button>
+          <Button
+            variant="danger"
+            title="Delete article"
+            aria-label="Delete article"
+            on:click={() => deleteArticle(article.id)}
+          >
+            <Trash class="h-5 w-5" />
+          </Button>
         </div>
       </li>
     {/each}

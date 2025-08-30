@@ -37,6 +37,7 @@
       {required}
       {placeholder}
       class="rounded-lg border p-2 text-gray-700 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+      {...$$restProps}
     />
   {/if}
   {#if error}
