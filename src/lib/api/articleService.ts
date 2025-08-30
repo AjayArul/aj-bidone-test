@@ -22,3 +22,8 @@ export async function createArticle(payload: Omit<Article, 'id'>): Promise<Artic
     body: JSON.stringify(payload),
   });
 }
+
+// Delete
+export async function deleteArticleApi(id: number): Promise<void> {
+  return await apiCall(`${BASE}/${id}`, { method: 'DELETE' });
+}

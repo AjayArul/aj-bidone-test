@@ -1,9 +1,10 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { deleteArticleApi } from '$lib/api/articleService';
   import Button from '$lib/components/Button.svelte';
   import Input from '$lib/components/Input.svelte';
   import Modal from '$lib/components/Modal.svelte';
-  import { addArticle, articles, error, loading } from '$lib/stores/article';
+  import { addArticle, articles, error, loading, setArticles } from '$lib/stores/article';
   import { addNotification } from '$lib/stores/notifications';
   import { STATUS_DRAFT, STATUS_PUBLISHED } from '$lib/utils/constants';
   import { debounce, updateQueryParams } from '$lib/utils/helper';
@@ -62,21 +63,15 @@
   }
 
   async function deleteArticle(id: number) {
-    // TODO: Implement delete article functionality
+    if (!confirm('Are you sure?')) return;
+    const res = await deleteArticleApi(id);
+    setArticles($articles?.filter((data) => data.id != id));
+    addNotification('success', 'Article deleted successfully!');
   }
 </script>
 
 <div class="p-6">
-  <div class="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
-    <Input
-      name="search"
-      className="w-full md:w-80"
-      label="Search"
-      type="search"
-      placeholder="Search articles..."
-      bind:value={search}
-      on:input={handleInput}
-    />
+  <div class="mb-4 flex flex-col justify-end gap-2 md:flex-row md:items-center">
     <Button
       variant="secondary"
       className="flex items-center justify-center gap-2 h-10 w-full md:w-40"
@@ -86,22 +81,33 @@
     </Button>
   </div>
 
-  <div class="mb-4 flex justify-end gap-2">
-    <Button
-      variant="outline"
-      className={`${statusFilter === '' ? 'text-orange-400' : 'text-white'}`}
-      on:click={() => setStatusFilter(undefined)}>All</Button
-    >
-    <Button
-      variant="outline"
-      className={`${statusFilter === STATUS_PUBLISHED ? 'text-orange-400' : 'text-white'}`}
-      on:click={() => setStatusFilter(STATUS_PUBLISHED)}>Published</Button
-    >
-    <Button
-      variant="outline"
-      className={`${statusFilter === STATUS_DRAFT ? 'text-orange-400' : 'text-white'}`}
-      on:click={() => setStatusFilter(STATUS_DRAFT)}>Draft</Button
-    >
+  <div class="mb-4 flex flex-col items-end gap-2 md:flex-row md:justify-between">
+    <Input
+      name="search"
+      className="w-full md:w-auto"
+      label="Search"
+      type="search"
+      placeholder="Search articles..."
+      bind:value={search}
+      on:input={handleInput}
+    />
+    <div class="mb-4 w-full md:w-auto">
+      <Button
+        variant="outline"
+        className={`${statusFilter === '' ? 'text-orange-400' : 'text-white'}`}
+        on:click={() => setStatusFilter(undefined)}>All</Button
+      >
+      <Button
+        variant="outline"
+        className={`${statusFilter === STATUS_PUBLISHED ? 'text-orange-400' : 'text-white'}`}
+        on:click={() => setStatusFilter(STATUS_PUBLISHED)}>Published</Button
+      >
+      <Button
+        variant="outline"
+        className={`${statusFilter === STATUS_DRAFT ? 'text-orange-400' : 'text-white'}`}
+        on:click={() => setStatusFilter(STATUS_DRAFT)}>Draft</Button
+      >
+    </div>
   </div>
 
   <!-- TODO: Implement loading and error handling component -->
