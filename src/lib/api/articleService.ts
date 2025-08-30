@@ -5,7 +5,7 @@ import type { Article, ArticleQuery } from '$lib/utils/types';
 const BASE = PUBLIC_BASE_URL ? `${PUBLIC_BASE_URL}/articles` : 'http://localhost:3000/articles';
 
 // Fetch list
-export async function fetchArticles(query: ArticleQuery): Promise<Article[]> {
+export function fetchArticles(query: ArticleQuery): Promise<Article[]> {
   const params = new URLSearchParams();
   Object.entries(query).forEach(([k, v]) => v !== undefined && params.set(k, String(v)));
   params.append('orderby', 'createdAt');
@@ -15,7 +15,7 @@ export async function fetchArticles(query: ArticleQuery): Promise<Article[]> {
 }
 
 // Create
-export async function createArticle(payload: Omit<Article, 'id'>): Promise<Article> {
+export function createArticle(payload: Omit<Article, 'id'>): Promise<Article> {
   return apiCall<Article>(`${BASE}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -24,6 +24,15 @@ export async function createArticle(payload: Omit<Article, 'id'>): Promise<Artic
 }
 
 // Delete
-export async function deleteArticleApi(id: number): Promise<void> {
-  return await apiCall(`${BASE}/${id}`, { method: 'DELETE' });
+export function deleteArticleApi(id: number): Promise<void> {
+  return apiCall(`${BASE}/${id}`, { method: 'DELETE' });
+}
+
+// Update
+export function updateArticle(id: number, payload: Partial<Article>): Promise<Article> {
+  return apiCall(`${BASE}/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
 }

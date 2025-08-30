@@ -17,7 +17,7 @@ export interface Article {
   title: string;
   status: ArticleStatus;
   author: string;
-  createdAt: number;
+  createdAt: string;
 }
 
 export interface ArticleQuery {

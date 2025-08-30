@@ -2,7 +2,7 @@
   export let name: string;
   export let label: string;
   export let value: string = '';
-  export let type: 'text' | 'email' | 'password' | 'search' | 'select' = 'text';
+  export let type: 'text' | 'email' | 'password' | 'search' | 'select' | 'hidden' = 'text';
   export let required = false;
   export let id = `input-${Math.random().toString(36).slice(2)}`;
   export let className = '';
@@ -12,7 +12,7 @@
 </script>
 
 <div class={`mb-4 flex flex-col ${className}`}>
-  <label for={id} class="mb-1 text-sm font-medium">{label}</label>
+  <label for={id} class="mb-1 text-sm font-medium" class:hidden={type === 'hidden'}>{label}</label>
 
   {#if type === 'select'}
     <select

@@ -51,7 +51,9 @@
   function openAdd() {
     editingArticle = null;
     showModal = true;
+    formData = { ...formDataIni };
   }
+
   function closeAdd() {
     editingArticle = null;
     showModal = false;
@@ -59,7 +61,9 @@
   }
 
   function openEdit(article: Article) {
-    // TODO: Implement edit article functionality
+    editingArticle = article;
+    formData = { ...article };
+    showModal = true;
   }
 
   async function deleteArticle(id: number) {
@@ -118,6 +122,10 @@
     <p class="text-red-500">{$error}</p>
   {/if}
 
+  {#if $articles?.length === 0}
+    <p class="text-gray-500">No Articles!</p>
+  {/if}
+
   <ul class="grid gap-4 md:grid-cols-1 xl:grid-cols-2">
     {#each $articles as article}
       <li
@@ -143,10 +151,10 @@
     class="mx-auto max-w-lg space-y-6 rounded-lg bg-white p-6 text-gray-700 shadow"
     use:enhance={(submit) => {
       return async ({ result }) => {
-        if (result.type === 'success') {
+        if (result.type === 'success' && result?.data?.success) {
           addArticle(result?.data?.data as Article);
           closeAdd();
-          addNotification('success', 'Article saved successfully!');
+          addNotification('success', String(result?.data?.message) ?? '');
         } else if (result.type === 'failure') {
           formErrors = (result?.data as { errors: { [key: string]: string | null } }).errors;
         } else if (result.type === 'error') {
@@ -155,6 +163,12 @@
       };
     }}
   >
+    <Input
+      label="id"
+      name="id"
+      type="hidden"
+      value={editingArticle ? String(editingArticle.id) : ''}
+    />
     <Input
       label="Title"
       name="title"
@@ -178,7 +192,7 @@
       error={formErrors?.status || ''}
       required
     />
-    <Button type="submit" variant="primary">Save</Button>
+    <Button type="submit" variant="primary">{editingArticle ? 'Update' : 'Create'}</Button>
     <Button on:click={closeAdd}>Cancel</Button>
   </form>
 </Modal>

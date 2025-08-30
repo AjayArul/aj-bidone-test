@@ -5,7 +5,7 @@
 </script>
 
 {#if $notifications.length > 0}
-  <div class="fixed top-4 right-4 z-50 w-80 space-y-2 p-4">
+  <div class="fixed top-4 left-1/2 z-50 w-80 -translate-x-1/2 transform space-y-2 p-4">
     {#each $notifications as n (n.id)}
       <div
         in:fly={{ x: 100, duration: 250 }}
