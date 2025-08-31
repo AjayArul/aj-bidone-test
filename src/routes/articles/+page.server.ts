@@ -5,6 +5,10 @@ import { articleSchema } from '$lib/utils/validators';
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
+const MSG_ARRICLE_UPDATE_SUCC = 'Article updated successfully!';
+const MSG_ARRICLE_CREATED_SUCC = 'Article created successfully!';
+const MSG_ARRICLE_CREATED_FAIL = 'Article create failed!';
+
 export const actions: Actions = {
   default: async ({ request, fetch }) => {
     let formData = Object.fromEntries(await request.formData());
@@ -28,7 +32,7 @@ export const actions: Actions = {
           // edit mode
           const data = await updateArticle(Number(id), payload);
           return {
-            message: 'Article updated successfully!',
+            message: MSG_ARRICLE_UPDATE_SUCC,
             data: formData,
             success: true,
             errors: null,
@@ -38,7 +42,7 @@ export const actions: Actions = {
           // create mode
           const data = await createArticle(payload);
           return {
-            message: 'Article created successfully!',
+            message: MSG_ARRICLE_CREATED_SUCC,
             data: payload,
             success: true,
             errors: null,
@@ -46,10 +50,10 @@ export const actions: Actions = {
         }
       } catch (error) {
         return {
-          message: 'Article failed to create!',
+          message: MSG_ARRICLE_CREATED_FAIL,
           data: validatedForm.data,
           success: false,
-          error: 'Failed to create article',
+          error: MSG_ARRICLE_CREATED_FAIL,
           errors: null,
         };
       }

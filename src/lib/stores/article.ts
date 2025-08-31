@@ -1,9 +1,26 @@
+import { fetchArticles } from '$lib/api/articleService';
+import { pageLimit } from '$lib/utils/configs';
 import { writable } from 'svelte/store';
-import type { Article } from '../utils/types';
+import type { Article, ArticleQuery } from '../utils/types';
 
 export const articles = writable<Article[]>([]);
-export const loading = writable(false);
 export const error = writable<string | null>(null);
+
+export async function fetchArticlesStore(payload: ArticleQuery | {}) {
+  let defaultPayload = {
+    page: '1',
+    limit: pageLimit,
+  };
+  try {
+    const filterQuery: ArticleQuery | {} = { ...defaultPayload, ...payload };
+    const items = await fetchArticles(filterQuery);
+    articles.set(items ?? []);
+    error && error.set(null);
+  } catch (err) {
+    error.set(String(err));
+    articles.set([]);
+  }
+}
 
 export function addArticle(article: Article) {
   articles.update((list) => {
@@ -15,7 +32,11 @@ export function addArticle(article: Article) {
       return updated;
     }
     // add new
-    return [article, ...list];
+    let updated = [article, ...list];
+    if (updated.length > pageLimit) {
+      updated = updated.slice(0, pageLimit);
+    }
+    return updated;
   });
 }
 

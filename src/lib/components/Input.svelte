@@ -34,6 +34,8 @@
       {type}
       bind:value
       on:input
+      on:blur
+      on:keydown
       {required}
       {placeholder}
       class="rounded-lg border p-2 text-gray-700 focus:ring-2 focus:ring-blue-400 focus:outline-none"

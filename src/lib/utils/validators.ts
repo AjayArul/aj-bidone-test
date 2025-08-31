@@ -6,22 +6,15 @@ export const articleSchema = z.object({
     .string()
     .trim()
     .min(5, 'Title must be at least 5 characters')
-    .max(200, 'Title too long must be less than 200 characters'),
+    .max(100, 'Title too long must be less than 100 characters'),
 
   author: z
     .string()
     .trim()
     .min(3, 'Author must be at least 3 characters')
-    .max(100, 'Author name too long must be less than 100 characters'),
+    .max(50, 'Author name too long must be less than 50 characters'),
 
   status: z.enum([STATUS_DRAFT, STATUS_PUBLISHED]),
-
-  content: z
-    .string()
-    .trim()
-    .min(10, 'Content must be at least 10 characters')
-    .max(5000, 'Content too long')
-    .optional(),
 });
 
 export type ArticleFormData = z.infer<typeof articleSchema>;

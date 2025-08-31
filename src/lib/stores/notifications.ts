@@ -1,3 +1,4 @@
+import { notificationTimeout } from '$lib/utils/configs';
 import { writable } from 'svelte/store';
 
 export type NotificationType = 'success' | 'error' | 'warning' | 'info';
@@ -12,8 +13,11 @@ export const notifications = writable<Notification[]>([]);
 
 let counter = 0;
 
-export function addNotification(type: NotificationType, message: string, timeout = 3000) {
-  console.log('Adding notification:', { type, message });
+export function addNotification(
+  type: NotificationType,
+  message: string,
+  timeout = notificationTimeout
+) {
   const id = counter++;
   notifications.update((all) => [...all, { id, type, message }]);
 

@@ -30,6 +30,15 @@ export async function apiCall<T>(req: RequestInfo, init?: RequestInit): Promise<
 }
 
 // Custom error classes for better type checking
-export class NotFoundError extends Error {}
+export class NotFoundError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'NotFoundError';
+  }
+
+  toString() {
+    return this.message; // suppress "Error:" prefix
+  }
+}
 export class UnauthorizedError extends Error {}
 export class ServerError extends Error {}

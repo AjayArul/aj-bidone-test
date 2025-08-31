@@ -17,15 +17,6 @@ export async function safeParseError(res: Response): Promise<string> {
   }
 }
 
-// Debounce function to limit the rate of function calls
-export function debounce<T extends (...args: any[]) => void>(fn: T, delay = 300) {
-  let timeout: ReturnType<typeof setTimeout>;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn(...args), delay);
-  };
-}
-
 // Update URL query parameters without reloading the page
 interface QueryParamUpdates {
   [key: string]: string | undefined;
@@ -53,4 +44,39 @@ export function getZodFieldErrors(issues: ZodError['issues']) {
   }
 
   return errors;
+}
+
+// Debounce function to limit the rate of function calls
+export function debounce<T extends (...args: any[]) => void>(fn: T, delay: number = 300) {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  let lastArgs: Parameters<T> | null = null;
+
+  const debounced = (...args: Parameters<T>) => {
+    lastArgs = args;
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      fn(...args);
+      timeoutId = null;
+      lastArgs = null;
+    }, delay);
+  };
+
+  debounced.flush = () => {
+    if (timeoutId && lastArgs) {
+      clearTimeout(timeoutId);
+      fn(...lastArgs);
+      timeoutId = null;
+      lastArgs = null;
+    }
+  };
+
+  debounced.cancel = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+      lastArgs = null;
+    }
+  };
+
+  return debounced as T & { flush: () => void; cancel: () => void };
 }

@@ -16,13 +16,14 @@ test.describe('Button Tab Flow check', () => {
     await button.click();
 
     // TODO failing have to check and fix
-    console.log(await button.textContent());
-    console.log('URL after click:', page.url());
+    // console.log(await button.textContent());
+    // console.log('URL after click:', page.url());
     // await page.pause();
     // await expect(page).toHaveURL(/status=Published/);
     // await expect(page).toHaveURL(/.*status=Published/);
     // await expect(page).toHaveURL(/.*articles\?status=Published/);
     // await expect(button).toHaveClass(/text-orange-400/);
+    
     await expect(button).toHaveClass(/text-orange-400/, { timeout: 5000 });
   });
 });
