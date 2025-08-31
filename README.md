@@ -16,6 +16,7 @@ This project follows best practices for scalability, performance, and developer 
 
 ## Project Structure
 
+```
 aj-bidone-test
 ├── .env
 ├── .git
@@ -86,6 +87,7 @@ aj-bidone-test
 ├── tsconfig.json
 ├── vite.config.ts
 └── vitest.config.ts
+```
 
 ## Developing
 
