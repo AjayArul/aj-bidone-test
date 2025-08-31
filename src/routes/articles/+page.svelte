@@ -1,7 +1,8 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { enhance } from '$app/forms';
   import { deleteArticleApi } from '$lib/api/articleService';
-  import Button from '$lib/components/Button.svelte';
+  import Button from '$lib/components/button/Button.svelte';
   import Input from '$lib/components/Input.svelte';
   import Modal from '$lib/components/Modal.svelte';
   import { addArticle, articles, error, loading, setArticles } from '$lib/stores/article';
@@ -43,7 +44,6 @@
   }
 
   function setStatusFilter(status: typeof STATUS_DRAFT | typeof STATUS_PUBLISHED | undefined) {
-    console.log('Setting status filter to:', status);
     statusFilter = status || '';
     updateQueryParams({ status: status || undefined });
   }
@@ -72,12 +72,19 @@
     setArticles($articles?.filter((data) => data.id != id));
     addNotification('success', 'Article deleted successfully!');
   }
+  
+  onMount(() => {
+    // This will only run on the client
+    console.log('Component mounted in the client');
+  });
 </script>
 
 <div class="p-6">
   <div class="mb-4 flex flex-col justify-end gap-2 md:flex-row md:items-center">
     <Button
-      variant="secondary"
+      data-testid="addArticle"
+      title="add article"
+      variant="secondary" 
       className="flex items-center justify-center gap-2 h-10 w-full md:w-40"
       on:click={openAdd}
     >
@@ -171,7 +178,7 @@
 </div>
 
 <Modal bind:open={showModal} onClose={closeAdd}>
-  <h2 class="mb-4 text-xl font-bold text-gray-700">{editingArticle ? 'Edit' : 'Add'} Article</h2>
+  <h2 class="mb-4 text-xl font-bold text-gray-700 modal">{editingArticle ? 'Edit' : 'Add'} Articless</h2>
   <form
     method="POST"
     class="mx-auto max-w-lg space-y-6 rounded-lg bg-white p-6 text-gray-700 shadow"

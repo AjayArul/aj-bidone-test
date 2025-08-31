@@ -2,9 +2,12 @@
   import type { ButtonVariant } from '$lib/utils/types';
   export let type: 'button' | 'submit' | 'reset' = 'button';
   export let disabled = false;
-  export let extraProps: Record<string, any> = {};
   export let variant: ButtonVariant = 'default';
   export let className = '';
+  export let title: string | undefined = undefined;
+  export let ariaLabel: string | undefined = undefined;
+  $: hasContent = !!$$slots.default
+  $: fallbackAriaLabel = !hasContent && ariaLabel ? ariaLabel : undefined;
 </script>
 
 <button
@@ -32,6 +35,8 @@
       ${disabled ? 'cursor-not-allowed opacity-50' : ''}
       ${className}
     `}
+  aria-label={fallbackAriaLabel}
+  {title}
   {...$$restProps}
 >
   <slot />
